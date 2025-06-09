@@ -43,6 +43,31 @@ public class Main {
 
 
 
+//               For delete
+            String query1=String.format("delete from students where id=%d",3);
+            int result1 =statement.executeUpdate(query1);
+            if(result1>0){
+                System.out.println("deletion succesfully done");
+            }else {
+                System.out.println("no entry is deleted");
+            }
+
+
+
+//             For update
+            String query2=String.format("update students set marks=%f where id=%d ",79.9,3);
+            int result2 =statement.executeUpdate(query2);
+            if(result2>0){
+                System.out.println("Updation succesfully done");
+            }else {
+                System.out.println("Database entries are not updated");
+            }
+
+
+
+
+
+
         } catch (SQLException e) {
 
             System.out.println(e.getMessage());
