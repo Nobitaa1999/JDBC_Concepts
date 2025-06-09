@@ -20,7 +20,9 @@ public class Main {
             Connection connection=DriverManager.getConnection(url,userName,password);
 
 //            Create statement
-            Statement statement= connection.createStatement();
+            String query="insert into students (name,age,marks) values (?,?,?)";
+            PreparedStatement preparedStatement=connection.prepareStatement(query);
+
             Scanner input=new Scanner(System.in);
             while(true){
                 System.out.print("Enter name : ");
@@ -29,21 +31,27 @@ public class Main {
                 int age=input.nextInt();
                 System.out.print("Enter marks : ");
                 Double marks=input.nextDouble();
+                preparedStatement.setString(1,name);
+                preparedStatement.setInt(2,age);
+                preparedStatement.setDouble(3,marks);
                 System.out.print("Enter more entries press(Y/N) : ");
                 String chiose=input.next();
-                String query=String.format("insert into students (name,age,marks) values ('%s',%d,%f)",name,age,marks);
-                statement.addBatch(query);
+                preparedStatement.addBatch();
                 if(chiose.toUpperCase().equals("N")){
                     break;
                 }
             }
-            int [] arr=statement.executeBatch();
 
+            int []arr=preparedStatement.executeBatch();
             for(int i=0;i<arr.length;i++){
                 if(arr[i]==0){
                     System.out.println((i+1) +"th query not added");
+                    break;
+                }else{
+                    System.out.println((i+1) +"th query added");
                 }
             }
+
 
 
 
