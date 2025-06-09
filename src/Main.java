@@ -20,21 +20,32 @@ public class Main {
             Connection connection=DriverManager.getConnection(url,userName,password);
 
 //            Create statement
-            String query="insert into students (name,age,marks) values (?,?,?)";
-            PreparedStatement preparedStatement=connection.prepareStatement(query);
-
-
-//             Execute query
-
-            preparedStatement.setString(1,"Shashi");
-            preparedStatement.setInt(2,21);
-            preparedStatement.setDouble(3,78.3);
-            int result=preparedStatement.executeUpdate();
-            if(result>0){
-                System.out.println("Insertion done");
-            }else {
-                System.out.println("Database entries are not done");
+            Statement statement= connection.createStatement();
+            Scanner input=new Scanner(System.in);
+            while(true){
+                System.out.print("Enter name : ");
+                String name=input.next();
+                System.out.print("Enter age : ");
+                int age=input.nextInt();
+                System.out.print("Enter marks : ");
+                Double marks=input.nextDouble();
+                System.out.print("Enter more entries press(Y/N) : ");
+                String chiose=input.next();
+                String query=String.format("insert into students (name,age,marks) values ('%s',%d,%f)",name,age,marks);
+                statement.addBatch(query);
+                if(chiose.toUpperCase().equals("N")){
+                    break;
+                }
             }
+            int [] arr=statement.executeBatch();
+
+            for(int i=0;i<arr.length;i++){
+                if(arr[i]==0){
+                    System.out.println((i+1) +"th query not added");
+                }
+            }
+
+
 
 
         } catch (SQLException e) {
