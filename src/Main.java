@@ -20,52 +20,21 @@ public class Main {
             Connection connection=DriverManager.getConnection(url,userName,password);
 
 //            Create statement
-            Statement statement=connection.createStatement();
+            String query="insert into students (name,age,marks) values (?,?,?)";
+            PreparedStatement preparedStatement=connection.prepareStatement(query);
 
 
 //             Execute query
-            String query="select * from students";
-            ResultSet resultSet=statement.executeQuery(query);
 
-//            process query
-            while(resultSet.next()){
-                int id=resultSet.getInt("id");
-                String name=resultSet.getString("name");
-                int age=resultSet.getInt("age");
-                double marks=resultSet.getDouble("marks");
-                System.out.println("id : "+id);
-                System.out.println("name : "+name);
-                System.out.println("age : "+age);
-                System.out.println("marks : "+marks);
-            }
-
-
-
-
-
-//               For delete
-            String query1=String.format("delete from students where id=%d",3);
-            int result1 =statement.executeUpdate(query1);
-            if(result1>0){
-                System.out.println("deletion succesfully done");
+            preparedStatement.setString(1,"Shashi");
+            preparedStatement.setInt(2,21);
+            preparedStatement.setDouble(3,78.3);
+            int result=preparedStatement.executeUpdate();
+            if(result>0){
+                System.out.println("Insertion done");
             }else {
-                System.out.println("no entry is deleted");
+                System.out.println("Database entries are not done");
             }
-
-
-
-//             For update
-            String query2=String.format("update students set marks=%f where id=%d ",79.9,3);
-            int result2 =statement.executeUpdate(query2);
-            if(result2>0){
-                System.out.println("Updation succesfully done");
-            }else {
-                System.out.println("Database entries are not updated");
-            }
-
-
-
-
 
 
         } catch (SQLException e) {
